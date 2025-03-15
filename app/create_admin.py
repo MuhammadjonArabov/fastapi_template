@@ -22,7 +22,8 @@ async def create_admin():
             phone=phone,
             password=hash_password(password),
             role=RoleType.admin,
-            verified=True
+            verified=True,
+            banned=False
         )
 
         db.add(admin_user)

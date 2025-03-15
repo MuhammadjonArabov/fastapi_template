@@ -1,61 +1,31 @@
-"""Define the admin views for the models."""
-
-from typing import Any, ClassVar, Union
-from fastapi import Request
+# admin/models.py
 from sqladmin import ModelView
-from sqlalchemy.orm import InstrumentedAttribute
-
-from app.database.helpers import hash_password
 from app.models.users import User
-
+# Yangi modelni import qilish (masalan)
+# from app.models.products import Product
 
 class UserAdmin(ModelView, model=User):
-    """Admin view for the User model."""
-
-    column_list: ClassVar[list[Any]] = [
-        User.id,
-        User.phone,
-        User.verified,
-        User.role,
-        User.banned,
-    ]
-
-    column_labels: ClassVar[dict[Union[str, InstrumentedAttribute[Any]], str]] = {
-        "id": "User ID",
-        "phone": "Phone",
-        "verified": "Verified",
-        "role": "Role",
-        "banned": "Banned",
-        "full_name": "Full Name",
+    """User modeli uchun admin ko‘rinishi."""
+    column_list = [User.id, User.phone, User.verified, User.role, User.banned]
+    column_labels = {
+        "id": "Foydalanuvchi ID",
+        "phone": "Telefon",
+        "verified": "Tasdiqlangan",
+        "role": "Rol",
+        "banned": "Taqiqlangan",
     }
+    # ... (qolgan kod o‘zgarmaydi)
 
-    column_details_exclude_list: ClassVar[list[Any]] = [User.password]
-
-    form_create_rules: ClassVar[list[str]] = [
-        "phone",
-        "password",
-        "full_name",
-        "verified",
-        "role",
-        "banned",
-    ]
-    form_edit_rules: ClassVar[list[str]] = [
-        "phone",
-        "full_name",
-        "verified",
-        "role",
-        "banned",
-    ]
-
-    icon = "fa-solid fa-user"
-
-    async def on_model_change(
-            self,
-            data: dict[str, Any],
-            _model: User,
-            is_created: bool,
-            _request: Request,
-    ) -> None:
-        """Customize the password hash before saving into DB."""
-        if is_created:
-            data["password"] = hash_password(data["password"])
+# Yangi model uchun misol
+"""
+class ProductAdmin(ModelView, model=Product):
+    column_list = [Product.id, Product.name, Product.price]
+    column_labels = {
+        "id": "ID",
+        "name": "Nomi",
+        "price": "Narxi",
+    }
+    form_create_rules = ["name", "price"]
+    form_edit_rules = ["name", "price"]
+    icon = "fa-solid fa-shopping-cart"
+"""

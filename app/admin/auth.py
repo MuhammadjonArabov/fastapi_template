@@ -52,15 +52,15 @@ class AdminAuth(AuthenticationBackend):
     async def login(self, request: Request) -> bool:
         """Login the user with phone and password."""
         form = await request.form()
-        phone = form.get("phone")
+        phone = form.get("username")  # sqladmin uses 'username' as field name
         password = form.get("password")
 
         if not phone or not password:
             return False
 
-        pattern = r"^\+998\d{2} \d{3} \d{2} \d{2}$"
+        pattern = r"^\+998\d{9}$"
         if not re.match(pattern, phone):
-            logger.error("Invalid phone number format! Use: +998xx xxx xx xx")
+            logger.error("Invalid phone number format! Use: +998xxxxxxxxx")
             return False
 
         async with async_session() as db:
@@ -77,10 +77,10 @@ class AdminAuth(AuthenticationBackend):
     def _validate_user(self, password: str, user: User | None) -> bool:
         """Validate if the user can access admin interface."""
         return not (
-            not user
-            or not verify_password(password, user.password)
-            or user.role != RoleType.admin
-            or user.banned
+                not user
+                or not verify_password(password, user.password)
+                or user.role != RoleType.admin
+                or user.banned
         )
 
     async def logout(self, request: Request) -> bool:
