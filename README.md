@@ -8,6 +8,7 @@
 - Unittestlar
 - JWT
 - PostgresSQL(SQLAlchemy|Alembic)
+- SqlAdmin
 
 ## Avzalliklari
 - Foydalanish uchun qulay
@@ -91,6 +92,10 @@ python test_setup.py
 3. Testlarni ishga tushuring
 ```bash
 pytest
+```
+4. admin yaratish. Shu yaratilgan user orqali http://127.0.0.1:8000/admin/ ga kirib username o'rniga Phone kiritiladi
+```bash
+python -m app.create_admin
 ```
 
 ## Eslatma
