@@ -25,6 +25,7 @@ def register_admin(app: FastAPI) -> None:
         authentication_backend=authentication_backend,
         base_url=get_settings().admin_pages_route,
         title=get_settings().admin_pages_title,
+        templates_dir="app/templates/admin",
     )
 
     admin.add_view(UserAdmin)
