@@ -84,6 +84,9 @@ pytest
 ```bash
 python -m app.create_admin
 ```
+![Alt text]([https://github.com/MuhammadjonArabov/fastapi_template/blob/main/docs.png])
+![Alt text]([https://github.com/MuhammadjonArabov/fastapi_template/blob/main/admin.png])
+
 
 ## Eslatma
 Bu templateni asosiy qismi https://github.com/seapagan/fastapi-template.git ga tegishli. Ushbu template uchun takliflar yoki xatolar bo'lsa bemalol aloqaga chiqing.
