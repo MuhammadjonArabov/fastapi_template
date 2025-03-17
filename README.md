@@ -33,20 +33,7 @@ docker exec -ti <CONTAINER_NAME> createdb -U <USER> <DB_NAME>
 docker exec -ti <CONTAINER_NAME> createdb -U <USER> <TEST_DB_NAME>
 ```
 
-Agar siz hammasini to'g'ri qilgan bo'lsangiz sizda quyidagi ma'lumotlar bor:
-- DB_USER=<USER>
-- DP_PASSWORD=<PASSWORD>
-- DB_PORT=5432
-- DB_NAME=<DB_NAME>
-- DB_ADDRESS=localhost
--
-- TEST_DB_USER=<USER>
-- TEST_DB_PASSWORD=<PASSWORD>
-- TEST_DB_PORT=5432
-- TEST_DB_NAME=<TEST_DB_NAME>
-- TEST_DB_ADDRESS=localhost
-
-Agar iloji bo'lsa postgres uchun userni ham yangi yaratish tafsiya qilinadi.
+Keyin .env ni env.dist namunadan foydalabi sozlang!
 
 ## Loyihani ishga tushurish:
 
