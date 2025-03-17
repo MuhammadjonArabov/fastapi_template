@@ -84,8 +84,9 @@ pytest
 ```bash
 python -m app.create_admin
 ```
-![Alt text]((https://github.com/MuhammadjonArabov/fastapi_template/blob/main/docs.png))
-![Alt text]((https://github.com/MuhammadjonArabov/fastapi_template/blob/main/admin.png))
+![Admin Panel](https://raw.githubusercontent.com/MuhammadjonArabov/fastapi_template/main/admin.png)
+![Documentation](https://raw.githubusercontent.com/MuhammadjonArabov/fastapi_template/main/docs.png)
+
 
 
 ## Eslatma
