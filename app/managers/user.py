@@ -22,7 +22,7 @@ class ErrorMessages:
 
     EMAIL_EXISTS = "A User with this email already exists"
     EMAIL_INVALID = "This email address is not valid"
-    AUTH_INVALID = "Wrong email or password"
+    AUTH_INVALID = "Wrong phone or password"
     USER_INVALID = "This User does not exist"
     CANT_SELF_BAN = "You cannot ban/unban yourself!"
     NOT_VERIFIED = "You need to verify your Email before logging in"
@@ -73,14 +73,18 @@ class UserManager:
 
     @staticmethod
     async def login(user_data: dict[str, str], session: AsyncSession) -> tuple[str, str]:
-        """Log in an existing User."""
-        user_do = await UserDB.get(session, email=user_data["email"])
+        """Log in an existing User using phone and password."""
+
+        if "phone" not in user_data or "password" not in user_data:
+            raise HTTPException(status.HTTP_400_BAD_REQUEST, "Phone and password are required")
+
+        user_do = await UserDB.get(session, phone=user_data["phone"])
 
         if not user_do or not pwd_context.verify(user_data["password"], str(user_do.password)) or bool(user_do.banned):
-            raise HTTPException(status.HTTP_400_BAD_REQUEST, ErrorMessages.AUTH_INVALID)
+            raise HTTPException(status.HTTP_400_BAD_REQUEST, "Invalid phone number or password")
 
         if not bool(user_do.verified):
-            raise HTTPException(status.HTTP_400_BAD_REQUEST, ErrorMessages.NOT_VERIFIED)
+            raise HTTPException(status.HTTP_400_BAD_REQUEST, "Your account is not verified")
 
         token = AuthManager.encode_token(user_do)
         refresh = AuthManager.encode_refresh_token(user_do)

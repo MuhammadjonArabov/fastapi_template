@@ -13,7 +13,7 @@ class UserBase(BaseModel):
 
     @validator("phone")
     def validate_phone(cls, value: str) -> str:
-        """Check if phone number matches the Uzbekistan format +998xx xxx xx xx."""
+        """Check if phone number matches the Uzbekistan format +998xxxxxxxxx."""
         pattern = r"^\+998\d{9}$"
         if not re.match(pattern, value):
             raise ValueError("Invalid phone number format! Use: +998xx xxx xx xx")

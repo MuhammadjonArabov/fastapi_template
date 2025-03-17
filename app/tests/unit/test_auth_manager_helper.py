@@ -5,8 +5,8 @@ from fastapi import HTTPException
 from pytest_mock import MockerFixture
 from pytest_mock.plugin import MockType
 
-from managers.auth import can_edit_user, is_admin, is_banned
-from utils.enums import RoleType
+from app.managers.auth import can_edit_user, is_admin, is_banned
+from app.models.enums import RoleType
 
 
 @pytest.fixture()

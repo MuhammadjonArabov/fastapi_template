@@ -6,12 +6,12 @@ import jwt
 import pytest
 from fastapi import BackgroundTasks, HTTPException, status
 
-from settings import get_settings
-from managers.auth import AuthManager, ResponseMessages
-from managers.user import UserManager
-from models import User
-from schemas.auth import TokenRefreshRequest
-from tests.helpers import get_token
+from app.settings import get_settings
+from app.managers.auth import AuthManager, ResponseMessages
+from app.managers.user import UserManager
+from app.models.users import User
+from app.schemas.user import TokenRefreshRequest
+from app.tests.helpers import get_token
 
 
 @pytest.mark.unit()
@@ -19,10 +19,10 @@ class TestAuthManager:
     """Test the AuthManager class methods."""
 
     test_user = {
+        "phone": "+998932004777",
         "email": "testuser@usertest.com",
         "password": "test12345!",
-        "first_name": "Test",
-        "last_name": "User",
+        "full_name": "Test",
     }
 
     # ------------------------------------------------------------------------ #

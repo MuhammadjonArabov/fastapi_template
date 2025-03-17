@@ -3,10 +3,10 @@
 import pytest
 from fastapi import BackgroundTasks, HTTPException
 
-from managers.user import ErrorMessages, UserManager, pwd_context
-from utils.enums import RoleType
-from models import User
-from schemas.user import UserChangePasswordRequest, UserEditRequest
+from app.managers.user import ErrorMessages, UserManager, pwd_context
+from app.models.enums import RoleType
+from app.models.users import User
+from app.schemas.user import UserChangePasswordRequest, UserEditRequest
 
 
 @pytest.mark.unit()
@@ -15,10 +15,10 @@ class TestUserManager:  # pylint: disable=too-many-public-methods
     """Test the UserManager class."""
 
     test_user = {
+        "phone": "+998932004777",
         "email": "testuser@usertest.com",
         "password": "test12345!",
-        "first_name": "Test",
-        "last_name": "User",
+        "full_name": "Test",
     }
 
     # ------------------------- Test register method ------------------------- #
@@ -27,9 +27,9 @@ class TestUserManager:  # pylint: disable=too-many-public-methods
         await UserManager.register(self.test_user, test_db)
         new_user = await test_db.get(User, 1)
 
+        assert new_user.phone == self.test_user["phone"]
         assert new_user.email == self.test_user["email"]
-        assert new_user.first_name == self.test_user["first_name"]
-        assert new_user.last_name == self.test_user["last_name"]
+        assert new_user.full_name == self.test_user["first_name"]
         assert new_user.password != self.test_user["password"]
 
         assert pwd_context.verify(self.test_user["password"], new_user.password)
@@ -39,10 +39,10 @@ class TestUserManager:  # pylint: disable=too-many-public-methods
         with pytest.raises(HTTPException, match=ErrorMessages.EMAIL_INVALID):
             await UserManager.register(
                 {
-                    "email": "testuser",
+                    "phone": "+998932004777",
+                    "email": "testuser@usertest.com",
                     "password": "test12345!",
-                    "first_name": "Test",
-                    "last_name": "User",
+                    "full_name": "Test",
                 },
                 test_db,
             )
@@ -51,28 +51,28 @@ class TestUserManager:  # pylint: disable=too-many-public-methods
         "create_data",
         [
             {
+                "phone": "",
+                "email": "testuser@usertest.com",
+                "password": "test12345!",
+                "full_name": "Test",
+            },
+            {
+                "phone": "+998932004777",
                 "email": "",
                 "password": "test12345!",
-                "first_name": "Test",
-                "last_name": "User",
+                "full_name": "Test",
             },
             {
-                "email": "testuser@usertest.com",
+                "phone": "+998932004777",
+                "email": "xoliqov@gmail.com",
                 "password": "",
-                "first_name": "Test",
-                "last_name": "User",
+                "full_name": "Test",
             },
             {
-                "email": "testuser@usertest.com",
+                "phone": "+998932004777",
+                "email": "xoliqov@gmail.com",
                 "password": "test12345!",
-                "first_name": "",
-                "last_name": "User",
-            },
-            {
-                "email": "testuser@usertest.com",
-                "password": "",
-                "first_name": "Test",
-                "last_name": "",
+                "full_name": "",
             },
         ],
     )

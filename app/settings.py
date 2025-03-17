@@ -41,9 +41,9 @@ class Settings(BaseSettings):
     version: str = "v1"
     repository: str = "https://github.com/abdurasuloff/fastapi-template"
     license_info: Dict[str, str] = {"name": "MIT", "url": "https://opensource.org/licenses/MIT"}
-    contact: Dict[str, str] = {"name": "Abdurasulov Akbarjon", "url": "https://www.akbarjon.uz"}
-    email: str = "abdurasulovcodes@gmail.com"
-    year: str = "2004"
+    contact: Dict[str, str] = {"name": "Arabov Muhammadjon", "url": "https://www.arabov.uz"}
+    email: str = "arabovmuhammadjon13@gmail.com"
+    year: str = "2025"
 
     model_config = SettingsConfigDict(env_file=".env", extra="allow")
 

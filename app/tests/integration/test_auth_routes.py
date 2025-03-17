@@ -8,11 +8,11 @@ from fastapi import status
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from managers.auth import AuthManager
-from managers.user import ErrorMessages as UserErrorMessages
-from managers.user import pwd_context
-from utils.enums import RoleType
-from models import User
+from app.managers.auth import AuthManager
+from app.managers.user import ErrorMessages as UserErrorMessages
+from app.managers.user import pwd_context
+from app.models.enums import RoleType
+from app.models.users import User
 
 logging.basicConfig(
     format="%(levelname)s [%(asctime)s] %(name)s - %(message)s",
@@ -32,9 +32,9 @@ class TestAuthRoutes:
     login_path = "/login/"
 
     test_user: dict[str, Union[str, bool]] = {
+        "phone": "+998901234567",
         "email": "testuser@usertest.com",
-        "first_name": "Test",
-        "last_name": "User",
+        "full_name": "Test",
         "password": pwd_context.hash("test12345!"),
         "verified": True,
     }
@@ -60,9 +60,9 @@ class TestAuthRoutes:
 
 
         post_body = {
+            "phone": "+998921234567",
             "email": "testuser@testuser.com",
-            "first_name": "Test",
-            "last_name": "User",
+            "full_name": "Test",
             "password": "test12345!",
         }
         response = await client.post(
@@ -81,9 +81,10 @@ class TestAuthRoutes:
         if user_from_db is None:
             pytest.fail("User was not added to the database")
 
+
+        assert user_from_db.phone == post_body["phone"]
         assert user_from_db.email == post_body["email"]
-        assert user_from_db.first_name == post_body["first_name"]
-        assert user_from_db.last_name == post_body["last_name"]
+        assert user_from_db.full_name == post_body["full_name"]
         assert user_from_db.password != post_body["password"]
         assert user_from_db.verified is True
         assert user_from_db.role == RoleType.user
@@ -93,12 +94,10 @@ class TestAuthRoutes:
     async def test_register_duplicate_user(
         self, client: AsyncClient, test_db: AsyncSession, mocker
     ) -> None:
-
-
         post_body = {
+            "phone": "+998921234567",
             "email": "testuser@testuser.com",
-            "first_name": "Test",
-            "last_name": "User",
+            "full_name": "Test",
             "password": "test12345!",
         }
 
@@ -120,11 +119,10 @@ class TestAuthRoutes:
     ) -> None:
         """Ensure that the raw password is not stored in the database."""
 
-
         post_body = {
+            "phone": "+998921234567",
             "email": "testuser@testuser.com",
-            "first_name": "Test",
-            "last_name": "User",
+            "full_name": "Test",
             "password": "test12345!",
         }
         await client.post(
@@ -146,9 +144,9 @@ class TestAuthRoutes:
         response = await client.post(
             self.register_path,
             json={
-                "email": "bad_email",
-                "first_name": "Test",
-                "last_name": "User",
+                "phone": "+998921234567",
+                "email": "testuser@testuser.com",
+                "full_name": "Test",
                 "password": "test12345!",
             },
         )
@@ -165,28 +163,28 @@ class TestAuthRoutes:
         [
             {},
             {
-                "email": "",
-                "first_name": "Test",
-                "last_name": "User",
+                "phone": "+998921234567",
+                "email": "testuser@testuser.com",
+                "full_name": "Test",
                 "password": "test12345!",
             },
             {
-                "email": "email@testuser.com",
-                "first_name": "",
-                "last_name": "User",
+                "phone": "+998921234567",
+                "email": "testuser@testuser.com",
+                "full_name": "",
                 "password": "test12345!",
             },
             {
-                "email": "email@testuser.com",
-                "first_name": "Test",
-                "last_name": "",
-                "password": "test12345!",
-            },
-            {
-                "email": "email@testuser.com",
-                "first_name": "Test",
-                "last_name": "User",
+                "phone": "+998921234567",
+                "email": "testuser@testuser.com",
+                "full_name": "Test",
                 "password": "",
+            },
+            {
+                "phone": "+998921234567",
+                "email": "testuser@testuser.com",
+                "full_name": "Test",
+                "password": "test12345!",
             },
         ],
     )
@@ -242,11 +240,11 @@ class TestAuthRoutes:
         "post_body",
         [
             {
-                "email": "notregistered@usertest.com",
+                "phone": "+998932004877",
                 "password": "test12345!",
             },
             {
-                "email": "testuser@usertest.com",
+                "phone": "+998932004877",
                 "password": "thisiswrong!",
             },
         ],
@@ -275,7 +273,7 @@ class TestAuthRoutes:
                 "password": "test12345!",
             },
             {
-                "email": "testuser@usertest.com",
+                "phone": "+998932004877",
             },
         ],
     )
@@ -305,7 +303,7 @@ class TestAuthRoutes:
         response = await client.post(
             self.login_path,
             json={
-                "email": self.test_banned_user["email"],
+                "phone": self.test_banned_user["phone"],
                 "password": "test12345!",
             },
         )
@@ -326,7 +324,7 @@ class TestAuthRoutes:
         login_response = await client.post(
             self.login_path,
             json={
-                "email": self.test_user["email"],
+                "phone": self.test_user["phone"],
                 "password": "test12345!",
             },
         )

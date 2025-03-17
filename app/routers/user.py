@@ -19,11 +19,12 @@ async def register(user_data: UserRegisterRequest, session: AsyncSession = Depen
     return {"token": token, "refresh": refresh}
 
 
-@router.post("/login/", name="login_an_existing_user", response_model=TokenResponse, status_code=status.HTTP_200_OK)
-async def login(user_data: UserLoginRequest, session: AsyncSession = Depends(get_database)) -> dict[str, str]:
-    """Login an existing User and return a JWT token plus a Refresh Token."""
+@router.post("/login/", response_model=TokenResponse)
+async def login(user_data: UserLoginRequest, session: AsyncSession = Depends(get_database)):
+    """Login user with phone and password"""
     token, refresh = await UserManager.login(user_data.model_dump(), session)
     return {"token": token, "refresh": refresh}
+
 
 
 @router.post("/refresh/", name="refresh_an_expired_token", response_model=TokenRefreshResponse)

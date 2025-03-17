@@ -5,10 +5,10 @@ from datetime import datetime, timezone
 import pytest
 from fastapi import BackgroundTasks, HTTPException, status
 
-from managers.auth import CustomHTTPBearer, ResponseMessages
-from managers.user import UserManager
-from models import User
-from tests.helpers import get_token
+from app.managers.auth import CustomHTTPBearer, ResponseMessages
+from app.managers.user import UserManager
+from app.models.users import User
+from app.tests.helpers import get_token
 
 
 @pytest.mark.unit()
@@ -19,10 +19,10 @@ class TestCustomHTTPBearer:
     mock_request_path = "managers.auth.Request"
 
     test_user = {
+        "phone": "+998932004777",
         "email": "testuser@usertest.com",
         "password": "test12345!",
-        "first_name": "Test",
-        "last_name": "User",
+        "full_name": "Test",
     }
 
     async def test_custom_bearer_class(self, test_db, mocker) -> None:

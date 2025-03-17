@@ -18,15 +18,15 @@ class UserDB:
         return result.scalars().all()
 
     @staticmethod
-    async def get(session: AsyncSession, user_id: int | None = None, email: str | None = None) -> User | None:
+    async def get(session: AsyncSession, user_id: int | None = None, phone: str | None = None) -> User | None:
         if user_id:
             """Return a specific user by their email address."""
             result = await session.execute(select(User).where(User.id == user_id))
             return result.scalars().first()
 
-        elif email:
-            """Return a specific user by their email address."""
-            result = await session.execute(select(User).where(User.email == email))
+        elif phone:
+            """Return a specific user by their phone."""
+            result = await session.execute(select(User).where(User.phone == phone))
             return result.scalars().first()
 
         else:
